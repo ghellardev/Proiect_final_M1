@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store Management</title>
+    <link rel="stylesheet" href="static/home.css"/>
+</head>
+<body>
+
+<header>
+    <nav>
+        <a class="active" href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+    </nav>
+    <h1>Store Management</h1>
+</header>
+
+<main>
+    <form action="{{ url_for('get_products') }}" method="get">
+        <button type="submit">Vizualizare tabel produse</button>
+    </form>
+
+    <form action="{{ url_for('get_chart') }}" method="get">
+        <button type="submit">Vizualizare grafic</button>
+    </form>
+
+    <form action="{{ url_for('get_employees_dep') }}" method="get">
+        <button type="submit">Vizualizare produse din categorie</button>
+    </form>
+
+
+</main>
+
+</body>
+</html>

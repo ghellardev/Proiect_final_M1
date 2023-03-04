@@ -1,0 +1,105 @@
+/* Set box-sizing to border-box for all elements */
+* {
+  box-sizing: border-box;
+}
+
+/* Set margin and padding to 0 for the body */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f2f2f2;
+  font-family: Arial, sans-serif;
+}
+
+/* Style the header element */
+header {
+  background-color: #333;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Style the navigation links */
+nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+nav a {
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  margin-right: 20px;
+  font-size: 18px;
+  transition: color 0.3s ease;
+}
+
+nav a:hover {
+  color: #4CAF50;
+}
+
+nav a.active {
+  color: #4CAF50;
+  border-bottom: 2px solid #4CAF50;
+}
+
+/* Style the heading element */
+h1 {
+  text-align: center;
+  color: #fff;
+  margin-top: 30px;
+  font-size: 36px;
+}
+
+/* Style the main content area */
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+}
+
+/* Style the form element */
+form {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Style the label element */
+label {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+/* Style the select element */
+select {
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  margin-bottom: 20px;
+  width: 300px;
+}
+
+/* Style the button element */
+button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  margin-right: 10px;
+  color: #fff;
+  background-color: #4CAF50;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 300px;
+}
+
+button:hover {
+  background-color: #3e8e41;
+}

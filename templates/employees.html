@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Produse</title>
+    <link rel="stylesheet" href="static/tabel.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('th').click(function () {
+                var table = $(this).parents('table').eq(0)
+                var rows = table.find('tr:gt(0)').toArray().sort(compare($(this).index()))
+                this.asc = !this.asc
+                if (!this.asc) {
+                    rows = rows.reverse()
+                }
+                for (var i = 0; i < rows.length; i++) {
+                    table.append(rows[i])
+                }
+            })
+        })
+
+        function compare(index) {
+            return function (a, b) {
+                var valA = getCellValue(a, index)
+                var valB = getCellValue(b, index)
+                return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
+            }
+        }
+
+        function getCellValue(row, index) {
+            return $(row).children('td').eq(index).text()
+        }
+    </script>
+</head>
+<body>
+<header>
+    <nav>
+        <a href="#">Link 1</a>
+        <a href="#">Link 2</a>
+        <a href="#">Link 3</a>
+        <a href="#" class="active">Link 4</a>
+    </nav>
+    <h1>Tabel Produse</h1>
+</header>
+<main>
+    <table>
+        <thead>
+        <tr>
+            {% for header in header_list %}
+                <th>{{ header }}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for product in products %}
+            <tr>
+                {% for header in header_list %}
+                    <td>{{ product[header] }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+       </table>
+    <form action="{{ url_for('home') }}" method="get">
+        <button type="submit">Home</button>
+    </form>
+</main>
+</body>
+</html>
