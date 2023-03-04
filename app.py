@@ -62,10 +62,8 @@ def get_products():
 
 @app.route('/poduse_cat', methods=['GET', 'POST'])
 def produse_cat():
-    # if request.method == "POST":
-    #     dep = request.form.get("dep")
-    #     return view(dep)
-    return render_template('choice.html',categorii=lista_categorii())
+    return render_template('choice.html', categorii=lista_categorii())
+
 
 def lista_categorii():
     lista_categorii = []
@@ -74,16 +72,45 @@ def lista_categorii():
             lista_categorii.append(i["Categorie"])
     return lista_categorii
 
+
+@app.route('/addProdus', methods=['GET', 'POST'])
+def addProdus():
+    return render_template('add_produs.html', categorii=lista_categorii())
+
+
+@app.route('/add_produs', methods=['POST'])
+def add_produs():
+    # Process the form data and insert the new product into the database
+    if request.method == "POST":
+        categorie = request.form.get('categorie')
+        nume = request.form.get('nume')
+        pret = request.form.get('pret')
+        stoc = request.form.get('stoc')
+        tip = request.form.get('tip')
+        produs_nou = {
+            'Nume': nume,
+            'Pret': float(pret),
+            'Stoc': int(stoc),
+            'Categorie': categorie,
+            'Tip': tip,
+            'Last Updated': datetime.datetime.now()
+        }
+        collection.insert_one(produs_nou)
+
+    # Redirect the user back to the home page
+    return redirect(url_for('home'))
+
+
 @app.route('/produse_cat/view', methods=['GET', 'POST'])
 def view():
-    dep = request.args.get('categorie')
+    categorie = request.args.get('categorie')
     products = []
     header_list = []
-    for i in collection.find({"Categorie": dep}, {"_id": 0}):
+    for i in collection.find({"Categorie": categorie}, {"_id": 0}):
         for j in i.keys():
             if j not in header_list:
                 header_list.append(j)
-    for i in collection.find({"Categorie": dep}).sort('Nume'):
+    for i in collection.find({"Categorie": categorie}).sort('Nume'):
         days = (datetime.datetime.now() - i["Last Updated"]).days
         if days > 365:
             i["Last Updated"] = f"{round(days / 365, 1)} Years Ago"
