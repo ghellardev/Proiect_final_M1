@@ -40,7 +40,7 @@ def get_chart_data():
 #     return render_template('chart.html', data_set_1=new_data_set_1, data_set_2=new_data_set_2)
 
 
-@app.route('/employees', methods=['GET'])
+@app.route('/produse', methods=['GET'])
 def get_products():
     products = []
     header_list = []
@@ -57,11 +57,11 @@ def get_products():
         else:
             i["Last Updated"] = f"{round(days, 0)} Days Ago"
         products.append(i)
-    return render_template('employees.html', products=products, header_list=header_list, getattr=getattr)
+    return render_template('produse.html', products=products, header_list=header_list, getattr=getattr)
 
 
-@app.route('/employees_dep', methods=['GET', 'POST'])
-def get_employees_dep():
+@app.route('/poduse_cat', methods=['GET', 'POST'])
+def produse_cat():
     # if request.method == "POST":
     #     dep = request.form.get("dep")
     #     return view(dep)
@@ -74,7 +74,7 @@ def lista_categorii():
             lista_categorii.append(i["Categorie"])
     return lista_categorii
 
-@app.route('/employees_dep/view', methods=['GET', 'POST'])
+@app.route('/produse_cat/view', methods=['GET', 'POST'])
 def view():
     dep = request.args.get('categorie')
     products = []
@@ -92,7 +92,7 @@ def view():
         else:
             i["Last Updated"] = f"{round(days, 0)} Days Ago"
         products.append(i)
-    return render_template('employees.html', products=products, header_list=header_list, getattr=getattr)
+    return render_template('produse.html', products=products, header_list=header_list, getattr=getattr)
 
 
 if __name__ == '__main__':
