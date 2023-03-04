@@ -2,39 +2,83 @@
 <html>
 <head>
     <title>Add Produs</title>
+    <link rel="stylesheet" href="static/home.css"/>
+    <style>
+        form {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 50px;
+        }
+
+        label {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        select, input[type="text"], input[type="number"] {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            margin-bottom: 20px;
+            width: 300px;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            color: #fff;
+            background-color: #4CAF50;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 300px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #3e8e41;
+        }
+    </style>
 </head>
 <body>
-<h1>Add Produs</h1>
-<form action="/add_produs" method="POST">
-    <label for="categorie">Categorie:</label>
-    <select id="categorie" name="categorie">
-        {% for categorie in categorii %}
-            <option value="{{ categorie }}">{{ categorie }}</option>
-        {% endfor %}
-    </select>
-    <br>
+<header>
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+    </nav>
+    <h1>Add Produs</h1>
+</header>
+<main>
+    <form action="/add_produs" method="POST">
+        <label for="categorie">Categorie:</label>
+        <select id="categorie" name="categorie">
+            {% for categorie in categorii %}
+                <option value="{{ categorie }}">{{ categorie }}</option>
+            {% endfor %}
+        </select>
 
-    <label for="nume">Nume:</label>
-    <input type="text" id="nume" name="nume">
-    <br>
+        <label for="nume">Nume:</label>
+        <input type="text" id="nume" name="nume">
 
-    <label for="pret">Pret:</label>
-    <input type="number" id="pret" name="pret" step="0.05">
-    <br>
+        <label for="pret">Pret:</label>
+        <input type="number" id="pret" name="pret" step="0.05">
 
-    <label for="stoc">Stoc:</label>
-    <input type="number" id="stoc" name="stoc">
-    <br>
+        <label for="stoc">Stoc:</label>
+        <input type="number" id="stoc" name="stoc">
 
-    <label for="tip">Tip:</label>
-    <select id="tip" name="tip">
-        <option value="U">Unisex</option>
-        <option value="M">Masculin</option>
-        <option value="F">Feminin</option>
-    </select>
-    <br>
+        <label for="tip">Tip:</label>
+        <select id="tip" name="tip">
+            <option value="U">Unisex</option>
+            <option value="M">Masculin</option>
+            <option value="F">Feminin</option>
+        </select>
+
         <input type="submit" value="Submit">
-
-</form>
+    </form>
+</main>
 </body>
 </html>
