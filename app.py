@@ -73,6 +73,25 @@ def lista_categorii():
     return lista_categorii
 
 
+def lista_nume():
+    lista_nume = []
+    for i in collection.find():
+        if i["Nume"] not in lista_nume:
+            lista_nume.append(i["Nume"])
+    return lista_nume
+
+def lista_car():
+    lista_car = []
+    for i in collection.find():
+        for j in i.keys():
+            if j in ["Nume","Pret","Stoc"]:
+                continue
+            else:
+                if j not in lista_car:
+                    lista_car.append(j)
+    return lista_car
+
+
 @app.route('/addProdus', methods=['GET', 'POST'])
 def addProdus():
     return render_template('add_produs.html', categorii=lista_categorii())
@@ -99,6 +118,40 @@ def add_produs():
 
     # Redirect the user back to the home page
     return redirect(url_for('home'))
+
+
+@app.route('/produse/add_car', methods=['GET', 'POST'])
+def addCar():
+    return render_template('add_car.html', categorii=lista_nume())
+
+
+@app.route('/produse/add_car/add', methods=['POST'])
+def add_car():
+    if request.method == "POST":
+        car_val = request.form.get('car_val')
+        car_name = request.form.get('car_name')
+        nume = request.form.get('nume')
+        dict_actual = {}
+        if car_val.isnumeric():
+            dict_actual[car_name] = int(car_val)
+        else:
+            dict_actual[car_name] = car_val
+        collection.update_one({'Nume': nume}, {"$set": dict_actual})
+    return redirect(url_for('get_products'))
+
+
+@app.route('/produse/rem_car', methods=['GET', 'POST'])
+def remCar():
+    return render_template('rem_car.html', names=lista_nume(),carname=lista_car() )
+
+
+@app.route('/produse/rem_car/remove', methods=['POST'])
+def rem_car():
+    if request.method == "POST":
+        car_name = request.form.get('car_name')
+        nume = request.form.get('nume')
+        collection.update_one({'Nume': nume}, {"$unset": {car_name: ""}})
+    return redirect(url_for('get_products'))
 
 
 @app.route('/produse_cat/view', methods=['GET', 'POST'])
