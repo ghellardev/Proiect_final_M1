@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 
 @app.route('/')
-def home():
+def home() -> str:
     return render_template('home.html')
 
 
@@ -16,39 +16,67 @@ collection = db['Produse']  # replace with your collection name
 
 
 @app.route('/chart', methods=['GET', 'POST'])
-def get_chart():
+def get_chart() -> str:
     return render_template('chart.html')
 
 
 @app.route('/get_chart_data')
 def get_chart_data():
-    Pret = []
-    Stoc = []
-    Nume = []
+    pret = []
+    stoc = []
+    nume = []
     for i in collection.find({}, {"_id": 0}):
-        Nume.append(i["Nume"])
-        Pret.append(i["Pret"])
-        Stoc.append(i["Stoc"])
-
-    return jsonify(Pret=Pret, Stoc=Stoc, Nume=Nume)
-
-
-# @app.route('/updateChart', methods=['GET', 'POST'])
-# def get_update_chart():
-#     new_data_set_1 = [50, 10, 60, 20, 60]
-#     new_data_set_2 = [110, 60, 10, 70, 40]
-#     return render_template('chart.html', data_set_1=new_data_set_1, data_set_2=new_data_set_2)
+        nume.append(i["Nume"])
+        pret.append(i["Pret"])
+        stoc.append(i["Stoc"])
+    print(type(jsonify(Pret=pret, Stoc=stoc, Nume=nume)))
+    return jsonify(Pret=pret, Stoc=stoc, Nume=nume)
 
 
 @app.route('/produse', methods=['GET'])
-def get_products():
-    products = []
-    header_list = []
-    for i in collection.find({}, {"_id": 0}):
+def get_products() -> str:
+    products = lista_products()
+    header_list = lista_headers()
+    print(type(render_template('produse.html', products=products, header_list=header_list, getattr=getattr)))
+    return render_template('produse.html', products=products, header_list=header_list, getattr=getattr)
+
+
+@app.route('/poduse_cat', methods=['GET', 'POST'])
+def produse_cat() -> str:
+    return render_template('choice.html', categorii=lista_categorii())
+
+
+def lista_categorii() -> list[str]:
+    lista_categ = []
+    for i in collection.find():
+        if i["Categorie"] not in lista_categ:
+            lista_categ.append(i["Categorie"])
+    return lista_categ
+
+
+def lista_caracteristici() -> list[str]:
+    lista_car = []
+    for i in collection.find():
         for j in i.keys():
-            if j not in header_list:
-                header_list.append(j)
-    for i in collection.find().sort('Nume'):
+            if j in ["_id", "Nume", "Pret", "Stoc"]:
+                continue
+            else:
+                if j not in lista_car:
+                    lista_car.append(j)
+    return lista_car
+
+
+def lista_nume() -> list[str]:
+    lista_names = []
+    for i in collection.find():
+        if i["Nume"] not in lista_names:
+            lista_names.append(i["Nume"])
+    return lista_names
+
+
+def lista_products(collection_received=collection.find({}, {"_id": 0}).sort('Nume')) -> list[str]:
+    products = []
+    for i in collection_received:
         days = (datetime.datetime.now() - i["Last Updated"]).days
         if days > 365:
             i["Last Updated"] = f"{round(days / 365, 1)} Years Ago"
@@ -57,43 +85,20 @@ def get_products():
         else:
             i["Last Updated"] = f"{round(days, 0)} Days Ago"
         products.append(i)
-    return render_template('produse.html', products=products, header_list=header_list, getattr=getattr)
+    return products
 
 
-@app.route('/poduse_cat', methods=['GET', 'POST'])
-def produse_cat():
-    return render_template('choice.html', categorii=lista_categorii())
-
-
-def lista_categorii():
-    lista_categorii = []
-    for i in collection.find():
-        if i["Categorie"] not in lista_categorii:
-            lista_categorii.append(i["Categorie"])
-    return lista_categorii
-
-
-def lista_nume():
-    lista_nume = []
-    for i in collection.find():
-        if i["Nume"] not in lista_nume:
-            lista_nume.append(i["Nume"])
-    return lista_nume
-
-def lista_car():
-    lista_car = []
-    for i in collection.find():
+def lista_headers(collection_received=collection.find({}, {"_id": 0})) -> list[str]:
+    header_list = []
+    for i in collection_received:
         for j in i.keys():
-            if j in ["Nume","Pret","Stoc"]:
-                continue
-            else:
-                if j not in lista_car:
-                    lista_car.append(j)
-    return lista_car
+            if j not in header_list:
+                header_list.append(j)
+    return header_list
 
 
 @app.route('/addProdus', methods=['GET', 'POST'])
-def addProdus():
+def addProdus() -> str:
     return render_template('add_produs.html', categorii=lista_categorii())
 
 
@@ -121,7 +126,7 @@ def add_produs():
 
 
 @app.route('/produse/add_car', methods=['GET', 'POST'])
-def addCar():
+def addCar() -> str:
     return render_template('add_car.html', categorii=lista_nume())
 
 
@@ -141,8 +146,8 @@ def add_car():
 
 
 @app.route('/produse/rem_car', methods=['GET', 'POST'])
-def remCar():
-    return render_template('rem_car.html', names=lista_nume(),carname=lista_car() )
+def remCar() -> str:
+    return render_template('rem_car.html', names=lista_nume(), carname=lista_caracteristici())
 
 
 @app.route('/produse/rem_car/remove', methods=['POST'])
@@ -155,23 +160,10 @@ def rem_car():
 
 
 @app.route('/produse_cat/view', methods=['GET', 'POST'])
-def view():
+def view() -> str:
     categorie = request.args.get('categorie')
-    products = []
-    header_list = []
-    for i in collection.find({"Categorie": categorie}, {"_id": 0}):
-        for j in i.keys():
-            if j not in header_list:
-                header_list.append(j)
-    for i in collection.find({"Categorie": categorie}).sort('Nume'):
-        days = (datetime.datetime.now() - i["Last Updated"]).days
-        if days > 365:
-            i["Last Updated"] = f"{round(days / 365, 1)} Years Ago"
-        elif days == 0:
-            i["Last Updated"] = "Today"
-        else:
-            i["Last Updated"] = f"{round(days, 0)} Days Ago"
-        products.append(i)
+    products = lista_products(collection.find({"Categorie": categorie}, {"_id": 0}).sort('Nume'))
+    header_list = lista_headers(collection.find({"Categorie": categorie}, {"_id": 0}))
     return render_template('produse.html', products=products, header_list=header_list, getattr=getattr)
 
 

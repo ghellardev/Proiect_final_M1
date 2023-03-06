@@ -105,6 +105,7 @@ button {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    width:200px
 }
 
 button:hover {
@@ -179,11 +180,14 @@ form {
     <form action="{{ url_for('home') }}" method="get">
         <button type="submit">Home</button>
     </form>
+    <form action="{{ url_for('addProdus') }}" method="get">
+        <button type="submit">Add produs</button>
+    </form>
     <form action="{{ url_for('addCar') }}" method="get">
         <button type="submit">Add Caracteristica</button>
     </form>
     <form action="{{ url_for('remCar') }}" method="get">
-        <button type="submit">Revomve Caracteristica</button>
+        <button type="submit">Remove Caracteristica</button>
     </form>
 </main>
 </body>
